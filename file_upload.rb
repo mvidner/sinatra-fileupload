@@ -39,12 +39,14 @@ class FileUpload < Sinatra::Base
   end
   
   post '/upload' do
-    if params[:file]
-      filename = params[:file][:filename]
-      file = params[:file][:tempfile]
+    if params[:files]
+      params[:files].each do |param|
+        filename = param[:filename]
+        file = param[:tempfile]
 
-      File.open(File.join(settings.files, filename), 'wb') do |f|
-        f.write file.read
+        File.open(File.join(settings.files, filename), 'wb') do |f|
+          f.write file.read
+        end
       end
 
       flash 'Upload successful'
